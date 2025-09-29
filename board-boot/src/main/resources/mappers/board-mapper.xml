@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.musecom.board.mapper.BoardMapper">
+
+  <resultMap id="BoardPostMap" type="net.musecom.board.dto.BoardPost">
+    <id property="id" column="id"/>
+    <result property="title" column="title"/>
+    <result property="content" column="content"/>
+    <result property="author" column="author"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="updatedAt" column="updated_at"/>
+  </resultMap>
+
+  <select id="findAll" resultMap="BoardPostMap">
+    SELECT id, title, content, author, created_at, updated_at
+    FROM board_post
+    ORDER BY id DESC
+  </select>
+
+  <select id="findById" parameterType="long" resultMap="BoardPostMap">
+    SELECT id, title, content, author, created_at, updated_at
+    FROM board_post
+    WHERE id = #{id}
+  </select>
+
+  <insert id="insert" parameterType="net.musecom.board.dto.BoardPost"
+          useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO board_post (title, content, author)
+    VALUES (#{title}, #{content}, #{author})
+  </insert>
+
+  <update id="update" parameterType="net.musecom.board.dto.BoardPost">
+    UPDATE board_post
+    SET title = #{title},
+        content = #{content},
+        author = #{author},
+        updated_at = NOW()
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete" parameterType="long">
+    DELETE FROM board_post WHERE id = #{id}
+  </delete>
+</mapper>
